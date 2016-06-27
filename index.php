@@ -12,19 +12,21 @@
 <hr>
 <pre>
 <?php
-//$dsn = 'mysql:host=127.0.0.1;dbname=questions;charset=UTF8';
+$dsn = 'mysql:host=127.0.0.1;dbname=questions;charset=UTF8';
 $dsn = 'sqlite:questions.db';
 $user = 'root';
 $password = '';
 
 try {
-    $conn = new PDO($dsn);
+    $conn = new PDO($dsn, $user, $password);
 } catch (PDOException $e) {
     echo 'Подключение не удалось: ' . $e->getMessage();
 }
+$RANDOMFUNC = 'RAND()';
+$RANDOMFUNC = 'RANDOM()';
 $sql= "SELECT `id`, `title` FROM `parts` ORDER BY `sort` ASC";
 foreach ($conn->query($sql) as $row) {
-	$partSql= "SELECT * FROM `questions` WHERE `part_id` = '{$row['id']}' /*AND `id`=233*/ ORDER BY RANDOM() LIMIT 1";
+	$partSql= "SELECT * FROM `questions` WHERE `part_id` = '{$row['id']}' /*AND `id`=233*/ ORDER BY $RANDOMFUNC LIMIT 1";
 	foreach ($conn->query($partSql) as $partRow) {
 		echo "<div id='question_". $row['id'] ."'>";
         echo "<h2>". $row['title'] ."</h2>" ."<h4>".$partRow['question'] ."<h4>";
