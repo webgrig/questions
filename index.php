@@ -1,17 +1,14 @@
 <?php
 session_start();
-//$_SESSION['stopQuestionId'] = [];
 if (!isset($_SESSION['stopQuestionId'])) {
 	$_SESSION['stopQuestionId'] = [];
 }
-//print_r($_SESSION['stopQuestionId']);
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Test</title>
 	<link rel="stylesheet" href="style.css">
-	<!--meta http-equiv="refresh" content="3;url=/"-->
 </head>
 <body style="margin: 0;">
 <pre>
@@ -38,7 +35,6 @@ foreach ($conn->query($sql) as $row) {
 		$_SESSION['stopQuestionId'][$row['id']] = [];
 	}
 	$stopQuestionId = implode(', ', $_SESSION['stopQuestionId'][$row['id']]);
-	//echo $stopQuestionId;
 	$partSql= "SELECT * FROM `questions` WHERE `part_id` = '{$row['id']}' AND `questions`.`id` NOT IN ({$stopQuestionId}) ORDER BY {$RANDOMFUNC} LIMIT 1";
 	$sqlCount= "SELECT COUNT(*) AS count FROM `questions` WHERE `part_id` = '{$row['id']}' AND `questions`.`id` NOT IN ({$stopQuestionId})";
 	foreach ($conn->query($sqlCount) as $rowCount) {
@@ -61,7 +57,6 @@ foreach ($conn->query($sql) as $row) {
 		echo "</div><hr>";
 	}
 }
-//print_r($_SESSION['stopQuestionId']);
 ?>
 <button class="refresh">Обновить все вопросы</button>
 <hr>
