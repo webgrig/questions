@@ -13,19 +13,7 @@ if (!isset($_SESSION['stopQuestionId'])) {
 <body style="margin: 0;">
 
 <pre>
-<script type="text/javascript">
-	Obj = {
-	x: "1"
-	// создаем объект Obj и записуем в него свойство х = 1.
-}
 
-MyType = function() {}
-// создаем пустой объект MyType.
-
-MyType.prototype = Obj; // наследуем MyType от Obj. newObj = new MyType();
-
-document.write(Obj.x);
-</script>
 <div style="width: 50%; float: left; box-sizing: border-box; padding:5px;">
 <button class="refresh">Обновить все вопросы</button>
 <hr>
