@@ -1,3 +1,11 @@
+<?php
+session_start();
+//$_SESSION['stopQuestionId'] = [];
+if (!isset($_SESSION['stopQuestionId'])) {
+	$_SESSION['stopQuestionId'] = [];
+}
+//print_r($_SESSION['stopQuestionId']);
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,13 +14,13 @@
 	<!--meta http-equiv="refresh" content="3;url=/"-->
 </head>
 <body style="margin: 0;">
-
+<pre>
 <div style="width: 50%; float: left; box-sizing: border-box; padding:5px;">
 <button class="refresh">Обновить все вопросы</button>
 <hr>
 <pre>
 <?php
-$dsn = 'mysql:host=127.0.0.1;dbname=questions;charset=UTF8';
+//$dsn = 'mysql:host=127.0.0.1;dbname=questions;charset=UTF8';
 $dsn = 'sqlite:questions.db';
 $user = 'root';
 $password = '';
@@ -22,12 +30,27 @@ try {
 } catch (PDOException $e) {
     echo 'Подключение не удалось: ' . $e->getMessage();
 }
-$RANDOMFUNC = 'RAND()';
+//$RANDOMFUNC = 'RAND()';
 $RANDOMFUNC = 'RANDOM()';
 $sql= "SELECT `id`, `title` FROM `parts` ORDER BY `sort` ASC";
 foreach ($conn->query($sql) as $row) {
-	$partSql= "SELECT * FROM `questions` WHERE `part_id` = '{$row['id']}' /*AND `id`=233*/ ORDER BY $RANDOMFUNC LIMIT 1";
+	if (!array_key_exists($row['id'], $_SESSION['stopQuestionId'])) {
+		$_SESSION['stopQuestionId'][$row['id']] = [];
+	}
+	$stopQuestionId = implode(', ', $_SESSION['stopQuestionId'][$row['id']]);
+	//echo $stopQuestionId;
+	$partSql= "SELECT * FROM `questions` WHERE `part_id` = '{$row['id']}' AND `questions`.`id` NOT IN ({$stopQuestionId}) ORDER BY {$RANDOMFUNC} LIMIT 1";
+	$sqlCount= "SELECT COUNT(*) AS count FROM `questions` WHERE `part_id` = '{$row['id']}' AND `questions`.`id` NOT IN ({$stopQuestionId})";
+	foreach ($conn->query($sqlCount) as $rowCount) {
+		$countAll = $rowCount['count'];
+	}
 	foreach ($conn->query($partSql) as $partRow) {
+		if ($countAll == 1) {
+			$_SESSION['stopQuestionId'][$row['id']] = [];
+		}
+		if (!in_array($partRow['id'], $_SESSION['stopQuestionId'][$row['id']])) {
+			$_SESSION['stopQuestionId'][$row['id']][] = $partRow['id'];
+		}
 		echo "<div id='question_". $row['id'] ."'>";
         echo "<h2>". $row['title'] ."</h2>" ."<h4>".$partRow['question'] ."<h4>";
         echo "<button class='newQuestion' data-part='". $row['id'] ."' data-q='". $partRow['id'] ."'>Другой вопрос</button><br><br>";
@@ -38,6 +61,7 @@ foreach ($conn->query($sql) as $row) {
 		echo "</div><hr>";
 	}
 }
+//print_r($_SESSION['stopQuestionId']);
 ?>
 <button class="refresh">Обновить все вопросы</button>
 <hr>

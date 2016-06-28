@@ -1,5 +1,9 @@
 <?php
-if(NULL !== $_POST['updateQ']) {
+session_start();
+if (!isset($_SESSION['stopQuestionId'])) {
+	$_SESSION['stopQuestionId'] = [];
+}
+if(NULL !== $_POST['updatePart']) {
 	$dsn = 'mysql:host=127.0.0.1;dbname=questions;charset=UTF8';
 	$dsn = 'sqlite:questions.db';
 	$user = 'root';
@@ -12,10 +16,24 @@ if(NULL !== $_POST['updateQ']) {
 	}
 	$RANDOMFUNC = 'RAND()';
 	$RANDOMFUNC = 'RANDOM()';
-	$sql= "SELECT * FROM `questions` JOIN `parts` ON `questions`.`part_id` = `parts`.`id` AND `questions`.`part_id` = '{$_POST['updatePart']}' AND `questions`.`id`!={$_POST['updateQ']} ORDER BY $RANDOMFUNC LIMIT 1";
+	if (!in_array($_POST['updateQ'], $_SESSION['stopQuestionId'][$_POST['updatePart']])) {
+		$_SESSION['stopQuestionId'][$_POST['updatePart']][] = $_POST['updateQ'];
+	}
+	$stopQuestionId = implode(', ', $_SESSION['stopQuestionId'][$_POST['updatePart']]);
+	$sql= "SELECT `questions`.id AS id1, * FROM `questions` JOIN `parts` ON `questions`.`part_id` = `parts`.`id` AND `questions`.`part_id` = '{$_POST['updatePart']}' AND `questions`.`id` NOT IN ({$stopQuestionId}) ORDER BY {$RANDOMFUNC} LIMIT 1";
+	$sqlCount= "SELECT COUNT(*) AS count FROM `questions` JOIN `parts` ON `questions`.`part_id` = `parts`.`id` AND `questions`.`part_id` = '{$_POST['updatePart']}' AND `questions`.`id` NOT IN ({$stopQuestionId})";
+	foreach ($conn->query($sqlCount) as $rowCount) {
+		$countAll = $rowCount['count'];
+	}
 	foreach ($conn->query($sql) as $row) {
+		if (!array_key_exists($_POST['updatePart'], $_SESSION['stopQuestionId'])) {
+			$_SESSION['stopQuestionId'][$_POST['updatePart']] = [];
+		}
+		if ($countAll == 1) {
+			$_SESSION['stopQuestionId'][$_POST['updatePart']] = [];
+		}
 		echo "<h2>". $row['title'] ."</h2>" ."<h4>".$row['question'] ."<h4>";
-        echo "<button class='newQuestion' data-part='". $row['id'] ."' data-q='". $row['id'] ."'>Другой вопрос</button><br><br>";
+        echo "<button class='newQuestion' data-part='". $row['id'] ."' data-q='". $row['id1'] ."'>Другой вопрос</button><br><br>";
 		echo "<a href='#' class='readMore'>Ответ</a>";
 		echo "<div style='display: none'>";
 		echo $row['answer'];

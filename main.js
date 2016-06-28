@@ -10,7 +10,6 @@ function newQuestion(e){
 	e.preventDefault();
 	var updatePart = $(this).attr('data-part');
 	var updateQ = $(this).attr('data-q');
-	console.log(updateQ);
 	$.ajax({
 		type: 'POST',
 		url: '/update.php',
