@@ -13,20 +13,19 @@ if (!isset($_SESSION['stopQuestionId'])) {
 <body style="margin: 0;">
 
 <pre>
-<?php
-date_default_timezone_set('UTC');
-
-$filed_date = '01-01-2015';
-$count_date = date('t');
-$matches = array();
-
-if(preg_match('/^([0-9]{1,2})-([0-9]{1,2})-[0-9]{4}$/', $filed_date , $matches) && $matches[1] <= $count_date && $matches[2] <= 12){
-   echo 'Date\'s format is valid';
-} else{
-    echo 'Date\'s format is not valid';
+<script type="text/javascript">
+	Obj = {
+	x: "1"
+	// создаем объект Obj и записуем в него свойство х = 1.
 }
-print_r($matches);
-?>
+
+MyType = function() {}
+// создаем пустой объект MyType.
+
+MyType.prototype = Obj; // наследуем MyType от Obj. newObj = new MyType();
+
+document.write(Obj.x);
+</script>
 <div style="width: 50%; float: left; box-sizing: border-box; padding:5px;">
 <button class="refresh">Обновить все вопросы</button>
 <hr>
