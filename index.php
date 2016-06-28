@@ -18,7 +18,7 @@ if (!isset($_SESSION['stopQuestionId'])) {
 <pre>
 <?php
 //$dsn = 'mysql:host=127.0.0.1;dbname=questions;charset=UTF8';
-$dsn = 'sqlite:questions.db';
+$dsn = 'sqlite:questions.sqlite';
 $user = 'root';
 $password = '';
 
