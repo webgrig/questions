@@ -32,11 +32,11 @@ if(NULL !== $_POST['updatePart']) {
 		if ($countAll == 1) {
 			$_SESSION['stopQuestionId'][$_POST['updatePart']] = [];
 		}
-		echo "<h2>". $row['title'] ."</h2>" ."<h4>".$row['question'] ."<h4>";
+		echo "<h2>". $row['title'] ."</h2>" ."<h4>".htmlspecialchars($row['question']) ."<h4>";
         echo "<button class='newQuestion' data-part='". $row['id'] ."' data-q='". $row['id1'] ."'>Другой вопрос</button><br><br>";
 		echo "<a href='#' class='readMore'>Ответ</a>";
 		echo "<div style='display: none'>";
-		echo $row['answer'];
+		echo htmlspecialchars($row['answer']);
 		echo "</div>";
 	}
 }

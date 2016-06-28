@@ -13,6 +13,20 @@ if (!isset($_SESSION['stopQuestionId'])) {
 <body style="margin: 0;">
 
 <pre>
+<?php
+date_default_timezone_set('UTC');
+
+$filed_date = '01-01-2015';
+$count_date = date('t');
+$matches = array();
+
+if(preg_match('/^([0-9]{1,2})-([0-9]{1,2})-[0-9]{4}$/', $filed_date , $matches) && $matches[1] <= $count_date && $matches[2] <= 12){
+   echo 'Date\'s format is valid';
+} else{
+    echo 'Date\'s format is not valid';
+}
+print_r($matches);
+?>
 <div style="width: 50%; float: left; box-sizing: border-box; padding:5px;">
 <button class="refresh">Обновить все вопросы</button>
 <hr>
@@ -49,11 +63,11 @@ foreach ($conn->query($sql) as $row) {
 			$_SESSION['stopQuestionId'][$row['id']][] = $partRow['id'];
 		}
 		echo "<div id='question_". $row['id'] ."'>";
-        echo "<h2>". $row['title'] ."</h2>" ."<h4>".$partRow['question'] ."<h4>";
+        echo "<h2>". $row['title'] ."</h2>" ."<h4>".htmlspecialchars($partRow['question']) ."<h4>";
         echo "<button class='newQuestion' data-part='". $row['id'] ."' data-q='". $partRow['id'] ."'>Другой вопрос</button><br><br>";
 		echo "<a href='#' class='readMore'>Ответ</a>";
 		echo "<div style='display: none'>";
-		echo $partRow['answer'];
+		echo htmlspecialchars($partRow['answer']);
 		echo "</div>";
 		echo "</div><hr>";
 	}
