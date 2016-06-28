@@ -4,6 +4,7 @@ if (!isset($_SESSION['stopQuestionId'])) {
 	$_SESSION['stopQuestionId'] = [];
 }
 if(NULL !== $_POST['updatePart']) {
+	echo file_get_contents('php://input');
 	$dsn = 'mysql:host=127.0.0.1;dbname=questions;charset=UTF8';
 	$dsn = 'sqlite:questions.db';
 	$user = 'root';
