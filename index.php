@@ -12,6 +12,39 @@ if (!isset($_SESSION['stopQuestionId'])) {
 </head>
 <body style="margin: 0;">
 <pre>
+<?php
+class A {
+  public function m_A() {
+    echo "This is A!\n";
+  }
+}
+class B {
+  public function m_B() {
+    echo "This is B!\n";
+  }
+}
+class C {
+  private $_parent_A;
+  private $_parent_B;
+  public function __construct() {
+    $this->_parent_A = new A();
+    $this->_parent_B = new B();
+  }
+  public function __call($m, $a) {
+    try {
+      $method_A = new ReflectionMethod('A', $m);
+      return $method_A->invokeArgs($this->_parent_A, $a);
+    } catch (ReflectionException $e) {
+      $method_B = new ReflectionMethod('B', $m);
+      return $method_B->invokeArgs($this->_parent_B, $a);
+    }
+  }
+}
+$C = new C();
+$C->m_A();
+$C->m_B();
+?>
+<pre>
 <div style="width: 50%; float: left; box-sizing: border-box; padding:5px;">
 <button class="refresh">Обновить все вопросы</button>
 <hr>
