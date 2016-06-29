@@ -12,8 +12,10 @@ if (!isset($_SESSION['stopQuestionId'])) {
 </head>
 <body style="margin: 0;">
 
-<pre>
 
+<?php
+//phpinfo();
+?>
 <div style="width: 50%; float: left; box-sizing: border-box; padding:5px;">
 <button class="refresh">Обновить все вопросы</button>
 <hr>
@@ -29,8 +31,8 @@ try {
 } catch (PDOException $e) {
     echo 'Подключение не удалось: ' . $e->getMessage();
 }
-//$RANDOMFUNC = 'RAND()';
-$RANDOMFUNC = 'RANDOM()';
+//$RANDOMFUNC = "RAND(\"{time()}\")";
+$RANDOMFUNC = "RANDOM()";
 $sql= "SELECT `id`, `title` FROM `parts` ORDER BY `sort` ASC";
 foreach ($conn->query($sql) as $row) {
 	if (!array_key_exists($row['id'], $_SESSION['stopQuestionId'])) {
