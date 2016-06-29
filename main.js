@@ -12,7 +12,7 @@ function newQuestion(e){
 	var updateQ = $(this).attr('data-q');
 	$.ajax({
 		type: 'POST',
-		url: '/update.php',
+		url: '/new_question.php',
 		data: {'updatePart': updatePart, 'updateQ': updateQ},
 		success: function(dataResp){
 			$("#question_"+updatePart).html(dataResp);
