@@ -12,10 +12,11 @@ if (!isset($_SESSION['stopQuestionId'])) {
 </head>
 <body style="margin: 0;">
 
-
+<pre>
 <?php
-//phpinfo();
+
 ?>
+</pre>
 <div style="width: 50%; float: left; box-sizing: border-box; padding:5px;">
 <button class="refresh">Обновить все вопросы</button>
 <hr>
