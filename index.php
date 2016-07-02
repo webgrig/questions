@@ -14,7 +14,6 @@ if (!isset($_SESSION['stopQuestionId'])) {
 
 <pre>
 <?php
-
 ?>
 </pre>
 <div style="width: 50%; float: left; box-sizing: border-box; padding:5px;">
