@@ -53,11 +53,14 @@ foreach ($conn->query($sql) as $row) {
 			$_SESSION['stopQuestionId'][$row['id']][] = $partRow['id'];
 		}
 		echo "<div id='question_". $row['id'] ."'>";
-        echo "<h2>". $row['title'] ."</h2>" ."<h4>".htmlspecialchars($partRow['question']) ."<h4>";
+        $question = htmlspecialchars($partRow['question'], ENT_NOQUOTES);
+		echo "<h2>". $row['title'] ."</h2>" ."<h4>". preg_replace("/\&lt\;(img.*)\&gt\;/i", "<$1>", $question) ."</h4>";
         echo "<button class='newQuestion' data-part='". $row['id'] ."' data-q='". $partRow['id'] ."'>Другой вопрос</button><br><br>";
 		echo "<a href='#' class='readMore'>Ответ</a>";
 		echo "<div style='display: none'>";
-		echo htmlspecialchars($partRow['answer']);
+		$answer = htmlspecialchars($partRow['answer'], ENT_NOQUOTES);
+		echo preg_replace("/\&lt\;(img.*)\&gt\;/i", "<$1>", $answer);
+		//echo $answer;
 		echo "</div>";
 		echo "</div><hr>";
 	}
@@ -79,11 +82,13 @@ foreach ($conn->query($sql) as $row) {
 	if (isset($_POST['search'])) {
 		$sql= "SELECT `questions`.id, `questions`.question, `questions`.answer, `parts`.`title`  FROM `questions` JOIN `parts`  ON `questions`.part_id = `parts`.id AND (`question` LIKE '%{$_POST['search']}%' OR `answer` LIKE '%{$_POST['search']}%' OR `parts`.`title` LIKE '%{$_POST['search']}%') ORDER BY `parts`.`sort` ASC";
 		foreach ($conn->query($sql) as $row) {
-			echo "<h2>". $row['title'] ."</h2>" ."<h4>". htmlspecialchars($row['question']) ."<h4>";
+			$question = htmlspecialchars($row['question'], ENT_NOQUOTES);
+			echo "<h2>". $row['title'] ."</h2>" ."<h4>". preg_replace("/\&lt\;(img.*)\&gt\;/i", "<$1>", $question) ."</h4>";
 			echo "#{$row['id']}\r\n";
 			echo "<a href='#' class='readMore'>Ответ</a>";
 			echo "<div style='display: none'>";
-			echo htmlspecialchars($row['answer']);
+			$answer = htmlspecialchars($row['answer'], ENT_NOQUOTES);
+			echo preg_replace("/\&lt\;(img.*)\&gt\;/i", "<$1>", $answer);
 			echo "</div><hr>";
 		}
 	}

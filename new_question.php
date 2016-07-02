@@ -32,11 +32,13 @@ if(NULL !== $_POST['updatePart']) {
 		if ($countAll == 1) {
 			$_SESSION['stopQuestionId'][$_POST['updatePart']] = [];
 		}
-		echo "<h2>". $row['title'] ."</h2>" ."<h4>".htmlspecialchars($row['question']) ."<h4>";
+		$question = htmlspecialchars($row['question'], ENT_NOQUOTES);
+		echo "<h2>". $row['title'] ."</h2>" ."<h4>". preg_replace("/\&lt\;(img.*)\&gt\;/i", "<$1>", $question) ."</h4>";
         echo "<button class='newQuestion' data-part='". $row['id'] ."' data-q='". $row['id1'] ."'>Другой вопрос</button><br><br>";
 		echo "<a href='#' class='readMore'>Ответ</a>";
 		echo "<div style='display: none'>";
-		echo htmlspecialchars($row['answer']);
+		$answer = htmlspecialchars($row['answer'], ENT_NOQUOTES);
+		echo preg_replace("/\&lt\;(img.*)\&gt\;/i", "<$1>", $answer);
 		echo "</div>";
 	}
 }
