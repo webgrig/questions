@@ -13,8 +13,14 @@ if (!isset($_SESSION['stopQuestionId'])) {
 <body style="margin: 0;">
 
 <pre>
-<?php
 
+<?php
+$path_parts = pathinfo('/www/htdocs/inc/lib.inc.php');
+
+echo $path_parts['dirname'], "<br>";
+echo $path_parts['basename'], "<br>";
+echo $path_parts['extension'], "<br>";
+echo $path_parts['filename'], "<br>"; // начиная с PHP 5.2.0
 ?>
 </pre>
 <div style="width: 50%; float: left; box-sizing: border-box; padding:5px;">
