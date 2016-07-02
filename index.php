@@ -15,12 +15,6 @@ if (!isset($_SESSION['stopQuestionId'])) {
 <pre>
 
 <?php
-$path_parts = pathinfo('/www/htdocs/inc/lib.inc.php');
-
-echo $path_parts['dirname'], "<br>";
-echo $path_parts['basename'], "<br>";
-echo $path_parts['extension'], "<br>";
-echo $path_parts['filename'], "<br>"; // начиная с PHP 5.2.0
 ?>
 </pre>
 <div style="width: 50%; float: left; box-sizing: border-box; padding:5px;">
@@ -85,11 +79,11 @@ foreach ($conn->query($sql) as $row) {
 	if (isset($_POST['search'])) {
 		$sql= "SELECT `questions`.id, `questions`.question, `questions`.answer, `parts`.`title`  FROM `questions` JOIN `parts`  ON `questions`.part_id = `parts`.id AND (`question` LIKE '%{$_POST['search']}%' OR `answer` LIKE '%{$_POST['search']}%' OR `parts`.`title` LIKE '%{$_POST['search']}%') ORDER BY `parts`.`sort` ASC";
 		foreach ($conn->query($sql) as $row) {
-			echo "<h2>". $row['title'] ."</h2>" ."<h4>". $row['question'] ."<h4>";
+			echo "<h2>". $row['title'] ."</h2>" ."<h4>". htmlspecialchars($row['question']) ."<h4>";
 			echo "#{$row['id']}\r\n";
 			echo "<a href='#' class='readMore'>Ответ</a>";
 			echo "<div style='display: none'>";
-			echo $row['answer'];
+			echo htmlspecialchars($row['answer']);
 			echo "</div><hr>";
 		}
 	}
