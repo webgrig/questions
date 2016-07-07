@@ -14,20 +14,6 @@ if (!isset($_SESSION['stopQuestionId'])) {
 
 <pre>
 <?php
-$str = 'sd4gв 32';
-
-$char = preg_split('//', $str, -1, PREG_SPLIT_NO_EMPTY);
-// $char - массив не пустых символов
-$match = array();
-
-foreach($char as $item){
-    if(in_array($item, $match)) {
-        echo "This char is not unique => $item ";
-    } else {
-        $match[] = $item;
-    }
-}
-echo (empty($match))? "The string conteints only unique chars.":"";
 ?>
 </pre>
 <div style="width: 50%; float: left; box-sizing: border-box; padding:5px;">
