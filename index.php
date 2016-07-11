@@ -14,6 +14,9 @@ if (!isset($_SESSION['stopQuestionId'])) {
 
 <pre>
 <?php
+echo '3' + '0.5' , print('2') + 1;
+echo "<br>";
+print (int)((0.1 + 0.7) * 10);
 ?>
 </pre>
 <div style="width: 50%; float: left; box-sizing: border-box; padding:5px;">
