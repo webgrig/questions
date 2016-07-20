@@ -1,22 +1,26 @@
+<pre>
 <?php
-function isPalindrome($word) {
-  $word = strtolower(str_replace(" ", "", $word));
-  $stack = new SplStack();
-  $cnt = strlen($word);
-  for ($i = 0; $i < $cnt; ++$i) {
-    $stack->push( $word[$i] );
-  }
-  
-  $rword = "";
-  while ($stack->count() > 0) {
-    $rword .= $stack->pop();
-  }
-  return $word == $rword;
+//header("Content-Type: text/html; charset=UTF-8");
+$word = "А роза упала на лапу Азора";
+
+// Разбить строку на символы (это для того, чтобы можно было работать с utf-8)
+$arr = preg_split('//u',$word,-1,PREG_SPLIT_NO_EMPTY);
+print_r($arr);
+$rarr = array_merge(array_fill(0, count($arr), ''), array_reverse($arr));
+
+$cm = 0;
+$match = '';
+// Рассмотреть движение cтроки и её перевернутой копии навстречу друг другу с перекрытием
+while(array_shift($rarr) !== null) {
+     // Для каждого варианта перекрытия посчитать диапазоны совпадающих символов, оставляя самый длинный.
+     $matches = array_intersect_assoc($arr, $rarr);
+     if(!empty($matches)) {
+          $c = count($matches);
+          if($c > $cm) {
+               $cm = $c;
+               $match = implode('', $matches);
+          }
+     }
 }
 
-$word = "hello";
-if (isPalindrome($word)) {
-  print($word . " is a palindrome.\n");
-} else {
-  print($word . " is not a palindrome.\n");
-}
+echo $match; // вывести найденное.

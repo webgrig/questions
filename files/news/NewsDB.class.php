@@ -1,8 +1,9 @@
 <?php
 include "INewsDB.class.php";
-class NewsDB implements INewsDB{
-  const DB_NAME = 'news.db';
+class NewsDB implements INewsDB, IteratorAggregate{
+  const DB_NAME = 'news.sqlite3';
   protected $_db;
+  private $categoryItems = [];
   function __construct(){
     if(is_file(self::DB_NAME)){
       $this->_db = new SQLite3(self::DB_NAME);
@@ -26,11 +27,28 @@ class NewsDB implements INewsDB{
                   SELECT 1 as id, 'Политика' as name
                   UNION SELECT 2 as id, 'Культура' as name
                   UNION SELECT 3 as id, 'Спорт' as name";
-      $this->_db->exec($sql) or $this->_db->lastErrorMsg();	
+      $this->_db->exec($sql) or $this->_db->lastErrorMsg();
     }
+    $this->categoryItems = $this->getCategories();
   }
   function __destruct(){
     unset($this->_db);
+  }
+  private function getCategories(){
+    try{
+        $sql = "SELECT id, name FROM category";
+        $result = $this->_db->query($sql);
+        if (!is_object($result)){
+          throw new Exeption($this->_db->lastErrorMsg());
+        }
+
+        return $this->db2Arr($result);
+    } catch(Exeption $e){
+      echo $e->getMessage();
+    }
+  }
+  function getIterator(){
+    return new ArrayIterator($this->categoryItems);
   }
   function saveNews($title, $category, $description, $source){
     $dt = time();
@@ -39,8 +57,8 @@ class NewsDB implements INewsDB{
     $ret = $this->_db->exec($sql);
     if(!$ret)
       return false;
-    return true;	
-  }	
+    return true;
+  }
   protected function db2Arr(SQLite3Result $data){
     $arr = [];
     while($row = $data->fetchArray(SQLITE3_ASSOC))
@@ -49,23 +67,23 @@ class NewsDB implements INewsDB{
   }
   public function getNews(){
     try{
-      $sql = "SELECT msgs.id as id, title, category.name as category, description, source, datetime 
+      $sql = "SELECT msgs.id as id, title, category.name as category, description, source, datetime
               FROM msgs, category
               WHERE category.id = msgs.category
               ORDER BY msgs.id DESC";
       $result = $this->_db->query($sql);
-      if (!is_object($result)) 
+      if (!is_object($result))
         throw new Exception($this->_db->lastErrorMsg());
       return $this->db2Arr($result);
     }catch(Exception $e){
       return false;
     }
-  }	
+  }
   public function deleteNews($id){
     try{
       $sql = "DELETE FROM msgs WHERE id = $id";
       $result = $this->_db->exec($sql);
-      if (!$result) 
+      if (!$result)
         throw new Exception($this->_db->lastErrorMsg());
       return true;
     }catch(Exception $e){
@@ -74,6 +92,6 @@ class NewsDB implements INewsDB{
     }
   }
   function clearData($data){
-      return $this->_db->escapeString($data); 
-  }	
+      return $this->_db->escapeString($data);
+  }
 }

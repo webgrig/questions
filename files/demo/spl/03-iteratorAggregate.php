@@ -43,7 +43,7 @@ class NumbersSquareRoot implements Iterator {
   }
   public function valid(){
     return $this->_cur <= $this->_obj->getEnd();
-  }	
+  }
 }
 
 class MathIterator implements IteratorAggregate {
@@ -60,17 +60,17 @@ class MathIterator implements IteratorAggregate {
   public function getEnd(){
     return $this->_end;
   }
-  
+
   public function getIterator(){
     switch($this->_action){
       case 'pow':
         return new NumbersSquared($this); break;
       case 'sqrt':
-        return new NumbersSquareRoot($this); break;	
+        return new NumbersSquareRoot($this); break;
     }
   }
-  
- /* 
+
+ /*
   public function setValues($from, $to){
     $this->_start = $from;
     $this->_end = $to;
@@ -82,19 +82,19 @@ class MathIterator implements IteratorAggregate {
 }
 
 $obj = new MathIterator(3, 7, 'pow');
-foreach ($obj as $key => $value){ 
-  print "Квадрат числа $key = $value<br>";
+foreach ($obj as $key => $value){
+  print "Квадрат числа $key = $value" . PHP_EOL;
 }
 $obj = new MathIterator(3, 7, 'sqrt');
-foreach ($obj as $key => $value){ 
-  print "Квадратный корень числа $key = $value<br>";
+foreach ($obj as $key => $value){
+  print "Квадратный корень числа $key = $value" . PHP_EOL;
 }
 
 /*
 $obj = new MathIterator();
 $obj->setValues(3, 7);
 $obj->setAction("pow");
-foreach ($obj as $key => $value){ 
+foreach ($obj as $key => $value){
   print "Квадрат числа $key = $value<br>";
 }
 */
